@@ -102,7 +102,16 @@ input[type="text"]:focus {
 #webring-list {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 0;
+}
+
+.webring-row {
+  padding: 6px 8px;
+  border-radius: 6px;
+  transition: background-color 0.15s ease;
+}
+.webring-row:hover {
+  background-color: rgba(20, 18, 20, .06);
 }
 
 #webring-chart {

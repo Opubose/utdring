@@ -18,8 +18,8 @@ function makeGraph(containerId) {
 
   const nodeRadius = 8;
   const defaultNodeColor = "#B8B8B8";
-  const highlighedNodeColor = "#294B63";
-  const defaultEdgeColor = "#E5E5E5";
+  const highlighedNodeColor = "#da8830";
+  const defaultEdgeColor = "rgba(20, 18, 20, .14)";
 
   const svg = d3
     .select(`#${containerId}`)
@@ -27,7 +27,7 @@ function makeGraph(containerId) {
     .attr("width", "100%")
     .attr("height", "100%")
     .attr("viewBox", `0 0 ${width} ${height}`)
-    .style("background-color", "#FAF8F8")
+    .style("background-color", "transparent")
     .style("cursor", "move");
 
   const g = svg.append("g");
@@ -104,7 +104,7 @@ function makeGraph(containerId) {
     .attr("dx", 12)
     .attr("dy", 4)
     .text(d => d.website.replace(/^https?:\/\//, ""))
-    .attr("fill", "#4F587C")
+    .attr("fill", "#B26500")
     .style("font-size", "12px");
 
   simulation.nodes(webringData.sites).on("tick", ticked);
@@ -346,7 +346,7 @@ function makeGraph(containerId) {
   const statsBackground = svg
     .append("rect")
     .attr("id", "stats-background")
-    .attr("fill", "#4F587C")
+    .attr("fill", "#B26500")
     .attr("opacity", 0.5)
     .attr("x", 5)
     .attr("y", height - 30)

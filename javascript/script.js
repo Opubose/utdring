@@ -20,7 +20,7 @@ let createWebringList = (matchedSiteIndices) => {
     const displayUrl = formatUrl(site.website);
 
     const listItem = document.createElement("div");
-    listItem.className = "grid grid-cols-12 sm:grid-cols-6 gap-3 sm:gap-6";
+    listItem.className = "webring-row grid grid-cols-12 sm:grid-cols-6 gap-3 sm:gap-6";
     const isSearchItem =
       matchedSiteIndices.includes(index) &&
       matchedSiteIndices.length !== webringData.sites.length;

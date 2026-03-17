@@ -154,7 +154,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const mobileInput = document.getElementById("search-mobile");
 
   logConsoleMessage();
-  createWebringList(webringData.sites);
+  createWebringList([]);
   handleUrlFragment(desktopInput);
   handleUrlFragment(mobileInput);
 
@@ -164,9 +164,12 @@ document.addEventListener("DOMContentLoaded", () => {
   mobileInput.addEventListener("input", (e) => {
     filterWebring(e.target.value);
   });
-  window.addEventListener("hashChange", () => {
-    handleUrlFragment(desktopInput);
-    handleUrlFragment(mobileInput);
+  window.addEventListener("hashchange", () => {
+    if (window.location.hash.includes("?nav=")) {
+      navigateWebring();
+    } else {
+      handleUrlFragment(desktopInput);
+      handleUrlFragment(mobileInput);
+    }
   });
-  window.addEventListener("hashchange", navigateWebring);
 });

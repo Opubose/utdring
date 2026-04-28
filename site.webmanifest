@@ -1,0 +1,20 @@
+{
+  "name": "UTD Webring",
+  "short_name": "UTD Webring",
+  "description": "A webring for ECS students and alumni at the University of Texas at Dallas.",
+  "lang": "en",
+  "dir": "ltr",
+  "categories": ["education", "personal", "social"],
+  "icons": [
+    {
+      "src": "./webAssets/favicon.ico",
+      "sizes": "any",
+      "type": "image/x-icon"
+    }
+  ],
+  "theme_color": "#fef3c7",
+  "background_color": "#fef3c7",
+  "display": "standalone",
+  "start_url": "/",
+  "scope": "/"
+}

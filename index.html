@@ -12,26 +12,107 @@
   </style>
 
   <!-- SEO Meta Tags -->
-  <title>UTD Webring</title>
-  <meta name="description" content="A webring for ECS students and alumni at the University of Texas at Dallas.">
-  <meta name="keywords" content="webring, UTD, UT Dallas, UT, Computer Science, CS, ECS, personal websites, student portfolio">
+  <title>UTD Webring - ECS Students & Alumni at UT Dallas</title>
+  <meta name="description" content="A webring connecting personal websites of Computer Science and ECS students and alumni at the University of Texas at Dallas. Discover student portfolios, projects, and personal sites.">
+  <meta name="keywords" content="UTD Webring, UTD ECS webring, UT Dallas webring, UT Dallas CS, UT Dallas computer science, ECS webring, student portfolio, UT Dallas student websites, computer science webring, university webring">
+  <meta name="author" content="Ryan Polasky">
+  <meta name="creator" content="Ryan Polasky">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+
+  <link rel="canonical" href="https://ecs.utdring.com/">
 
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website">
+  <meta property="og:site_name" content="UTD Webring">
+  <meta property="og:locale" content="en_US">
   <meta property="og:url" content="https://ecs.utdring.com/">
-  <meta property="og:title" content="UTD Webring">
-  <meta property="og:description" content="A webring for ECS students and alumni at the University of Texas at Dallas.">
+  <meta property="og:title" content="UTD Webring - ECS Students & Alumni at UT Dallas">
+  <meta property="og:description" content="A webring connecting personal websites of Computer Science and ECS students and alumni at the University of Texas at Dallas.">
   <meta property="og:image" content="https://ecs.utdring.com/webAssets/og.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="960">
+  <meta property="og:image:height" content="540">
+  <meta property="og:image:alt" content="UTD Webring logo - a connected ring of UT Dallas ECS student personal websites.">
 
   <!-- Twitter -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://ecs.utdring.com/">
-  <meta property="twitter:title" content="UTD Webring">
-  <meta property="twitter:description" content="A webring for ECS students and alumni at the University of Texas at Dallas.">
+  <meta property="twitter:title" content="UTD Webring - ECS Students & Alumni at UT Dallas">
+  <meta property="twitter:description" content="A webring connecting personal websites of CS and ECS students and alumni at UT Dallas.">
   <meta property="twitter:image" content="https://ecs.utdring.com/webAssets/og.png">
+  <meta property="twitter:image:alt" content="UTD Webring logo - a connected ring of UT Dallas ECS student personal websites.">
 
-  <!-- Favicon -->
+  <!-- Theme & PWA -->
+  <meta name="theme-color" content="#fef3c7">
+  <meta name="application-name" content="UTD Webring">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="UTD Webring">
+  <meta name="format-detection" content="telephone=no">
+
+  <!-- Favicon & manifest -->
   <link rel="icon" type="image/x-icon" href="./webAssets/favicon.ico">
+  <link rel="manifest" href="./site.webmanifest">
+
+  <!-- Structured data (Schema.org) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Person",
+        "@id": "https://ryanpolasky.com/#person",
+        "name": "Ryan Polasky",
+        "url": "https://ryanpolasky.com/",
+        "sameAs": [
+          "https://www.linkedin.com/in/ryan-polasky/",
+          "https://github.com/ryanpolasky"
+        ]
+      },
+      {
+        "@type": "EducationalOrganization",
+        "@id": "https://ecs.utdring.com/#utd",
+        "name": "The University of Texas at Dallas",
+        "alternateName": "UT Dallas",
+        "url": "https://www.utdallas.edu/",
+        "sameAs": "https://en.wikipedia.org/wiki/University_of_Texas_at_Dallas",
+        "department": {
+          "@type": "EducationalOrganization",
+          "name": "Erik Jonsson School of Engineering and Computer Science",
+          "alternateName": "ECS",
+          "url": "https://engineering.utdallas.edu/"
+        }
+      },
+      {
+        "@type": "Organization",
+        "@id": "https://ecs.utdring.com/#org",
+        "name": "UTD Webring",
+        "alternateName": "ECS Webring",
+        "description": "A webring connecting personal websites of Computer Science and ECS students and alumni at the University of Texas at Dallas.",
+        "url": "https://ecs.utdring.com/",
+        "logo": "https://ecs.utdring.com/webAssets/logoOnWhite.svg",
+        "image": "https://ecs.utdring.com/webAssets/og.png",
+        "parentOrganization": { "@id": "https://ecs.utdring.com/#utd" },
+        "member": { "@id": "https://ryanpolasky.com/#person" },
+        "sameAs": [
+          "https://github.com/ryanpolasky/utdring"
+        ]
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://ecs.utdring.com/#website",
+        "url": "https://ecs.utdring.com/",
+        "name": "UTD Webring",
+        "description": "A webring for ECS students and alumni at the University of Texas at Dallas.",
+        "inLanguage": "en",
+        "author": { "@id": "https://ryanpolasky.com/#person" },
+        "creator": { "@id": "https://ryanpolasky.com/#person" },
+        "publisher": { "@id": "https://ecs.utdring.com/#org" },
+        "maintainer": { "@id": "https://ryanpolasky.com/#person" },
+        "about": { "@id": "https://ecs.utdring.com/#org" }
+      }
+    ]
+  }
+  </script>
 
   <!-- JS sources -->
   <script src="//unpkg.com/alpinejs" defer></script>

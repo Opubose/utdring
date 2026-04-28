@@ -1,3 +1,4 @@
+import { fuzzyMatch } from "./helpers.js";
 let mobileExists = false,
   desktopExists = false;
 
@@ -201,7 +202,7 @@ function makeGraph(containerId) {
     } else {
       return d.name.toLowerCase().includes(searchTerm) ||
         d.year.toString().includes(searchTerm) ||
-        d.website.toLowerCase().includes(searchTerm)
+        fuzzyMatch(d.website.toLowerCase(), searchTerm)
         ? highlighedNodeColor
         : defaultNodeColor;
     }
@@ -221,7 +222,7 @@ function makeGraph(containerId) {
       const matches =
         d.name.toLowerCase().includes(searchTerm) ||
         d.year.toString().includes(searchTerm) ||
-        d.website.toLowerCase().includes(searchTerm);
+        fuzzyMatch(d.website.toLowerCase(), searchTerm);
       return matches ? highlighedNodeColor : defaultNodeColor;
     });
 
@@ -232,7 +233,7 @@ function makeGraph(containerId) {
             (d) =>
               d.name.toLowerCase().includes(searchTerm) ||
               d.year.toString().includes(searchTerm) ||
-              d.website.toLowerCase().includes(searchTerm)
+              fuzzyMatch(d.website.toLowerCase(), searchTerm)
           )
           .size()
       : 0;
@@ -253,7 +254,7 @@ function makeGraph(containerId) {
         (d) =>
           d.name.toLowerCase().includes(searchTerm) ||
           d.year.toString().includes(searchTerm) ||
-          d.website.toLowerCase().includes(searchTerm)
+          fuzzyMatch(d.website.toLowerCase(), searchTerm)
       );
 
       if (matchingNodes.size() > 0) {

@@ -153,7 +153,7 @@
 <body class="bg-mustard-100">
   <div id="bg-layer" aria-hidden="true"></div>
 
-  <main class="text-black-900 px-2 py-6 sm:p-6 sm:min-h-[100vh] sm:w-[100vw] overflow-x-hidden">
+  <main class="text-black-900 px-3 md:px-8 lg:px-12 py-6 xl:p-6 xl:min-h-[100vh] xl:w-[100vw] overflow-x-hidden">
     <header class="site-header">
       <img class="site-logo" src="webAssets/logoOnWhite.svg" alt="UTD Webring logo" />
       <p class="site-title" aria-label="ecs webring">
@@ -162,7 +162,8 @@
       </p>
     </header>
 
-    <div class="sm:hidden fixed top-6 left-0 w-full px-2 z-10" style="padding-top: 4px; padding-bottom: 10px;">
+    <!-- Sticky search for phones / tablet portrait. Hides on lg+ where it lives in the right column. -->
+    <div class="search-shell xl:hidden">
       <input
         type="text"
         id="search-mobile"
@@ -171,32 +172,32 @@
       />
     </div>
 
-    <div id="left-col" class="w-full sm:w-3/5 lg:w-2/5">
-      <p class="hidden sm:block font-latinRoman mt-10 leading-tight hide-on-small">
+    <div id="left-col" class="w-full xl:w-2/5">
+      <p class="hidden md:block font-latinRoman mt-6 xl:mt-10 leading-tight">
         Welcome to the official webring of ECS students at the
         <a class="text-mustard-500 underline" href="https://utdallas.edu/" target="_blank">University of Texas at Dallas</a>
         in Richardson, Texas. This is an ongoing project to document one of the most talented student bodies in the world,
         all while making them more visible to the public.
       </p>
 
-      <p class="hidden sm:block font-latinRoman mt-4 leading-tight hide-on-small">
+      <p class="hidden md:block font-latinRoman mt-4 leading-tight">
         If you're one of us, we welcome you with open arms
         (or in this case,
         <a class="text-mustard-500 underline" href="https://github.com/ryanpolasky/utdring">open PRs</a>).
       </p>
 
       <div>
-        <div class="grid grid-cols-12 sm:grid-cols-6 gap-3 sm:gap-6 mb-6 mt-16">
-          <span class="col-span-5 sm:col-span-3 text-left font-latinRomanDunhillOblique text-burgundy-500 text-lg italic">NAME</span>
-          <span class="col-span-2 sm:col-span-1 text-right font-latinRomanDunhillOblique text-burgundy-500 text-lg italic">YEAR</span>
-          <span class="col-span-5 sm:col-span-2 text-left font-latinRomanDunhillOblique text-burgundy-500 text-lg italic">URL</span>
+        <div class="grid grid-cols-12 xl:grid-cols-6 gap-3 xl:gap-6 mb-6 mt-10 xl:mt-16">
+          <span class="col-span-5 xl:col-span-2 text-left font-latinRomanDunhillOblique text-burgundy-500 text-lg italic">NAME</span>
+          <span class="col-span-2 xl:col-span-1 text-right font-latinRomanDunhillOblique text-burgundy-500 text-lg italic">YEAR</span>
+          <span class="col-span-5 xl:col-span-3 text-left font-latinRomanDunhillOblique text-burgundy-500 text-lg italic">URL</span>
         </div>
 
-        <div class="w-full flex flex-col space-y-1 text-sm sm:text-base mb-24 sm:mb-0" id="webring-list"></div>
+        <div class="w-full flex flex-col space-y-1 text-sm xl:text-base mb-24 xl:mb-0" id="webring-list"></div>
       </div>
     </div>
 
-    <div id="right-col" class="hidden fixed bottom-0 right-0 z-10 w-full p-6 lg:w-1/2 sm:flex flex-col space-y-2">
+    <div id="right-col" class="hidden fixed bottom-0 right-0 z-10 w-full p-6 xl:w-1/2 xl:flex flex-col space-y-2">
       <input
         type="text"
         id="search"
@@ -204,18 +205,19 @@
         class="font-latinMonoCaps px-4 py-2 border border-navy-400/50"
       />
       <div id="webring-chart" class="border border-navy-400/50">
-        <div id="chart-container" class="h-[24rem] lg:h-[32rem]"></div>
+        <div id="chart-container" class="h-[24rem] xl:h-[32rem]"></div>
       </div>
     </div>
 
     <footer
-      x-data="{ open: true }"
-      class="fixed bottom-0 left-0 w-full sm:hidden bg-white border-t border-black-800 pt-4 pb-3 px-2"
+      x-data="{ open: false }"
+      x-cloak
+      class="fixed bottom-0 left-0 w-full xl:hidden bg-white border-t border-black-800 pt-4 pb-3 px-3 md:px-8 lg:px-12"
     >
-      <div @click="open = ! open" class="flex justify-between">
+      <div @click="open = ! open" class="flex justify-between items-center cursor-pointer">
         <button class="font-latinMonoRegular text-black-900 flex space-x-2 items-center">
-          <img src="webAssets/icons/expand.svg" alt="Expand info symbol" />
-          <span x-text="open ? 'CLOSE' : 'MORE INFO'"></span>
+          <img :src="open ? 'webAssets/icons/close.svg' : 'webAssets/icons/expand.svg'" alt="" class="h-3 w-3" />
+          <span x-text="open ? 'CLOSE' : 'GRAPH + INFO'"></span>
         </button>
         <div class="flex space-x-4 leading-none">
           <a href="https://en.wikipedia.org/wiki/Webring" class="font-latinMonoCondOblique text-orange-700 underline italic">
@@ -230,8 +232,8 @@
         </div>
       </div>
 
-      <div x-show="open" class="w-full mt-8 mb-6">
-        <p class="w-full font-latinMonoRegular leading-none hide-on-small">
+      <div x-show="open" x-transition.opacity class="w-full mt-6 mb-4">
+        <p class="w-full font-latinMonoRegular leading-snug">
           We are ECS students and alumni studying at the
           <a class="text-mustard-500 underline" href="https://utdallas.edu/">University of Texas at Dallas</a>
           in Richardson, Texas. If you're one of us, we welcome you with open arms. (Or in this case,
@@ -239,14 +241,14 @@
         </p>
 
         <div id="webring-chart-mobile" class="w-full border border-black-900 mt-4">
-          <div id="chart-container-mobile" class="h-[12rem]"></div>
+          <div id="chart-container-mobile" class="h-[55vh] min-h-[22rem] max-h-[44rem]"></div>
         </div>
       </div>
 
       <img src="webAssets/logoOnWhite.svg" class="mt-2 h-6" alt="Webring light theme logo" />
     </footer>
 
-    <div class="hidden sm:flex fixed top-6 right-6 flex-col items-end leading-none z-10">
+    <div class="hidden xl:flex fixed top-6 right-6 flex-col items-end leading-none z-10">
       <a href="https://en.wikipedia.org/wiki/Webring" class="font-latinMonoCondOblique text-orange-400 underline italic">
         what's a webring?
       </a>

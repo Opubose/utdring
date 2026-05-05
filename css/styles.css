@@ -9,6 +9,14 @@
   --shadow: 0 18px 50px rgba(0, 0, 0, .10);
   --shadow-soft: 0 12px 38px rgba(0, 0, 0, .08);
   --radius: 16px;
+
+  /* Year ramp for the force graph (oldest → newest) */
+  --year-2024: #b23a3a;   /* burgundy */
+  --year-2025: #c14e2e;
+  --year-2026: #b26500;   /* mustard 500 */
+  --year-2027: #c98a18;
+  --year-2028: #daad30;   /* mustard 400 */
+  --year-2029: #9e9e38;   /* lime 400 */
 }
 
 * { box-sizing: border-box; }
@@ -57,8 +65,15 @@ main {
 
 .site-logo {
   display: block;
-  height: 48px;
+  height: 28px;
   width: auto;
+  max-width: 60vw;
+}
+@media (min-width: 768px) {
+  .site-logo { height: 36px; max-width: none; }
+}
+@media (min-width: 1280px) {
+  .site-logo { height: 48px; }
 }
 
 .site-title {
@@ -127,11 +142,23 @@ footer {
   -webkit-backdrop-filter: blur(10px);
 }
 
-@media (max-width: 639px) {
-  .site-header { display: none; }
+/* Mobile / tablet portrait sticky search shell.
+   No solid fill — just a backdrop-blur mask so list rows scrolling underneath
+   read as soft / out-of-focus rather than being painted over. */
+.search-shell {
+  position: sticky;
+  top: 0;
+  z-index: 25;
+  background: transparent;
+  -webkit-backdrop-filter: blur(12px) saturate(140%);
+  backdrop-filter: blur(12px) saturate(140%);
+  padding: 10px 0 10px;
+  margin-bottom: 6px;
 }
 
-@media (min-width: 640px) {
+/* Desktop layout: only kicks in at >=1280px so phones, iPad portrait, AND iPad landscape
+   all use the comfortable stacked layout (search up top, list full-width, drawer at bottom). */
+@media (min-width: 1280px) {
   html, body {
     height: 100%;
     overflow: hidden;
@@ -152,6 +179,11 @@ footer {
     grid-column: 1 / -1;
     position: relative;
     margin-bottom: 20px;
+  }
+
+  /* Search shell only sticky on small screens */
+  .search-shell {
+    display: none;
   }
 
   #left-col {
@@ -206,11 +238,32 @@ footer {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  * { transition: none !important; scroll-behavior: auto !important; }
+  * { transition: none !important; scroll-behavior: auto !important; animation: none !important; }
 }
 
-@media (max-width: 1024px) {
-  .hide-on-small {
-    display: none;
-  }
+/* ---- Force-graph polish (applies to both desktop & mobile chart containers) ---- */
+#webring-chart svg,
+#webring-chart-mobile svg {
+  display: block;
+}
+
+.node-circle {
+  transition: r 200ms ease, filter 200ms ease;
+  cursor: pointer;
+}
+.node-halo {
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 200ms ease, r 250ms ease;
+}
+.node-group:hover .node-halo,
+.node-group.is-hovered .node-halo {
+  opacity: 1;
+}
+.node-group:hover .node-circle {
+  filter: drop-shadow(0 2px 6px rgba(20,18,20,.18));
+}
+
+.link-line {
+  transition: stroke-opacity 200ms ease;
 }

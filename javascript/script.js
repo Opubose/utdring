@@ -20,7 +20,7 @@ let createWebringList = (matchedSiteIndices) => {
     const displayUrl = formatUrl(site.website);
 
     const listItem = document.createElement("div");
-    listItem.className = "webring-row grid grid-cols-12 sm:grid-cols-6 gap-3 sm:gap-6";
+    listItem.className = "webring-row grid grid-cols-12 xl:grid-cols-6 gap-3 xl:gap-6";
     const isSearchItem =
       matchedSiteIndices.includes(index) &&
       matchedSiteIndices.length !== webringData.sites.length;
@@ -33,14 +33,14 @@ let createWebringList = (matchedSiteIndices) => {
     }
 
     const name = document.createElement("span");
-    name.className = "col-span-5 sm:col-span-3 font-latinRomanCaps truncate";
+    name.className = "col-span-5 xl:col-span-2 font-latinRomanCaps truncate";
     name.textContent = site.name;
     if (isSearchItem) {
       name.className += " text-mustard-100"
     }
 
     const year = document.createElement("span");
-    year.className = "col-span-2 sm:col-span-1 text-right font-latinRoman";
+    year.className = "col-span-2 xl:col-span-1 text-right font-latinRoman";
     year.textContent = site.year;
     if (isSearchItem) {
       year.className += " text-mustard-100"
@@ -49,7 +49,7 @@ let createWebringList = (matchedSiteIndices) => {
     const link = document.createElement("a");
     link.href = site.website;
     link.className =
-      "col-span-5 sm:col-span-2 font-latinMonoRegular underline truncate";
+      "col-span-5 xl:col-span-3 font-latinMonoRegular underline truncate";
     link.textContent = displayUrl;
     if (isSearchItem) {
       link.className += " text-mustard-100"

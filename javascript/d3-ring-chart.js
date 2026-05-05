@@ -1,15 +1,60 @@
 import { fuzzyMatch } from "./helpers.js";
-let mobileExists = false,
-  desktopExists = false;
+
+const built = new Set();
+
+// Render the graph in `containerId` whenever the container actually has
+// nonzero dimensions. This lets us lazy-render the mobile graph as soon as
+// the drawer opens — instead of failing silently when the container is
+// hidden at page load.
+function renderWhenSized(containerId) {
+  if (built.has(containerId)) return;
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  if (el.clientWidth > 0 && el.clientHeight > 0) {
+    built.add(containerId);
+    makeGraph(containerId);
+    return;
+  }
+  const ro = new ResizeObserver((entries) => {
+    for (const entry of entries) {
+      const { width, height } = entry.contentRect;
+      if (width > 0 && height > 0 && !built.has(containerId)) {
+        built.add(containerId);
+        ro.disconnect();
+        makeGraph(containerId);
+      }
+    }
+  });
+  ro.observe(el);
+}
 
 function checkIfGraphNeeded() {
-  if (window.innerWidth < 640 && !mobileExists) {
-    mobileExists = true;
-    makeGraph("chart-container-mobile");
-  } else if (window.innerWidth > 640 && !desktopExists) {
-    desktopExists = true;
-    makeGraph("chart-container");
-  }
+  // Try both — each one will only render once it actually has dimensions.
+  // This handles: viewport changes, drawer opens, orientation flips.
+  renderWhenSized("chart-container");
+  renderWhenSized("chart-container-mobile");
+}
+
+// Maps a graduation year to a color along a burgundy → mustard → lime ramp.
+// Pulls from CSS custom props if defined; falls back to hardcoded values.
+function yearColorFor(year) {
+  const css = (k, fb) => {
+    if (typeof window === "undefined" || !document.documentElement) return fb;
+    const v = getComputedStyle(document.documentElement).getPropertyValue(k).trim();
+    return v || fb;
+  };
+  const ramp = {
+    2024: css("--year-2024", "#b23a3a"),
+    2025: css("--year-2025", "#c14e2e"),
+    2026: css("--year-2026", "#b26500"),
+    2027: css("--year-2027", "#c98a18"),
+    2028: css("--year-2028", "#daad30"),
+    2029: css("--year-2029", "#9e9e38"),
+  };
+  if (ramp[year]) return ramp[year];
+  // Clamp anything outside the known range to the nearest end.
+  if (year < 2024) return ramp[2024];
+  return ramp[2029];
 }
 
 function makeGraph(containerId) {
@@ -17,10 +62,11 @@ function makeGraph(containerId) {
   const width = container.clientWidth;
   const height = container.clientHeight;
 
-  const nodeRadius = 8;
+  const baseRadius = 9;
+  const nodeRadius = (d) => baseRadius + Math.max(0, Math.min(3, (d.year - 2024) * 0.45));
   const defaultNodeColor = "#B8B8B8";
   const highlighedNodeColor = "#da8830";
-  const defaultEdgeColor = "rgba(20, 18, 20, .14)";
+  const defaultEdgeColor = "rgba(20, 18, 20, .28)";
 
   const svg = d3
     .select(`#${containerId}`)
@@ -57,7 +103,7 @@ function makeGraph(containerId) {
     )
     .force("charge", d3.forceManyBody().strength(-100))
     .force("center", d3.forceCenter(width / 2, height / 2))
-    .force("collision", d3.forceCollide().radius(nodeRadius * 2))
+    .force("collision", d3.forceCollide().radius((d) => nodeRadius(d) * 2))
     .alphaDecay(0.02)
     .velocityDecay(0.4);
 
@@ -72,9 +118,11 @@ function makeGraph(containerId) {
     .data(links)
     .enter()
     .append("line")
+    .attr("class", "link-line")
     .attr("stroke", defaultEdgeColor)
     .attr("stroke-opacity", 1)
-    .attr("stroke-width", 1);
+    .attr("stroke-width", 1.4)
+    .attr("stroke-linecap", "round");
 
   const node = g
     .append("g")
@@ -82,6 +130,7 @@ function makeGraph(containerId) {
     .data(webringData.sites)
     .enter()
     .append("g")
+    .attr("class", "node-group")
     .call(
       d3
         .drag()
@@ -90,8 +139,19 @@ function makeGraph(containerId) {
         .on("end", dragended)
     );
 
+  // Halo (sits behind, becomes visible via CSS on hover)
   node
     .append("circle")
+    .attr("class", "node-halo")
+    .attr("r", (d) => nodeRadius(d) * 2.4)
+    .attr("fill", "none")
+    .attr("stroke", highlighedNodeColor)
+    .attr("stroke-width", 1.5)
+    .attr("stroke-opacity", 0.5);
+
+  node
+    .append("circle")
+    .attr("class", "node-circle")
     .attr("r", nodeRadius)
     .attr("fill", defaultNodeColor)
     .on("mouseover", handleMouseOver)
@@ -102,11 +162,13 @@ function makeGraph(containerId) {
   node
     .append("text")
     .attr("class", "font-latinMonoCondOblique")
-    .attr("dx", 12)
+    .attr("dx", 14)
     .attr("dy", 4)
     .text(d => d.website.replace(/^https?:\/\//, ""))
-    .attr("fill", "#B26500")
-    .style("font-size", "12px");
+    .attr("fill", "#9b3a2d")
+    .attr("opacity", 0.85)
+    .style("font-size", "12px")
+    .style("pointer-events", "none");
 
   simulation.nodes(webringData.sites).on("tick", ticked);
 
@@ -194,8 +256,13 @@ function makeGraph(containerId) {
   }
 
   function getNodeColor(d) {
-    const searchInput = document.getElementById("search");
-    const searchTerm = searchInput.value.toLowerCase();
+    const desktopInput = document.getElementById("search");
+    const mobileInput = document.getElementById("search-mobile");
+    const searchTerm = (
+      (desktopInput && desktopInput.value) ||
+      (mobileInput && mobileInput.value) ||
+      ""
+    ).toLowerCase();
 
     if (searchTerm === "") {
       return defaultNodeColor;
@@ -208,14 +275,20 @@ function makeGraph(containerId) {
     }
   }
 
-  document.getElementById("search").addEventListener("input", (e) => {
-    highlightAndZoomToNodes(e.target.value);
+  // Wire both desktop & mobile search inputs into the graph highlight.
+  ["search", "search-mobile"].forEach((id) => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.addEventListener("input", (e) => {
+        highlightAndZoomToNodes(e.target.value);
+      });
+    }
   });
 
   function highlightAndZoomToNodes(searchTerm) {
     searchTerm = searchTerm.toLowerCase();
 
-    node.selectAll("circle").attr("fill", (d) => {
+    node.selectAll(".node-circle").attr("fill", (d) => {
       if (searchTerm === "") {
         return defaultNodeColor;
       }

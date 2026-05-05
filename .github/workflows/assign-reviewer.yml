@@ -2,7 +2,8 @@ name: Auto Reviewer Assign
 on:
   pull_request:
     types: [opened, review_requested]
-
+permissions:
+  pull-requests: write
 jobs:
   auto-reviewer-assign:
     runs-on: ubuntu-latest
